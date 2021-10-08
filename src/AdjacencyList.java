@@ -46,13 +46,18 @@ public class AdjacencyList {
         }
     }
 
-    void breadthFirstSearch(int source) {
+    void breadthFirstSearch(int source, int destination) {
 
         boolean[] visited = new boolean[hm.size()];
         visited[source] = true;
+        int[] dist = new int[hm.size()];
+        int[] parent = new int[hm.size()];
+        Arrays.fill(parent, -1);
 
         Queue<Integer> q = new ArrayDeque<>(hm.size());
         q.add(source);
+        parent[source] = source;
+        dist[source] = 0;
 
         while (!q.isEmpty()) {
 
@@ -64,9 +69,25 @@ public class AdjacencyList {
                 if (!visited[l]) {
                     q.add(l);
                     visited[l] = true;
+                    // update parent and distance to find the shortest path
+                    parent[l] = frontElement;
+                    dist[l] = dist[frontElement] + 1;
                 }
             }
             System.out.println(frontElement);
+        }
+
+        // Print the shortest distance
+        System.out.println("Shortest distance: " + Arrays.toString(dist));
+
+        // Print the path from a source to any destination
+        if (destination != -1) {
+            int temp = destination;
+            while (temp != source) {
+                System.out.print(temp + " --- ");
+                temp = parent[temp];
+            }
+            System.out.print(temp);
         }
 
     }
@@ -86,7 +107,7 @@ public class AdjacencyList {
         System.out.println("Printing graph: ");
         al.printGraph();
         System.out.println("Breadth first search: ");
-        al.breadthFirstSearch(1);
+        al.breadthFirstSearch(1, 6);
 
     }
 
