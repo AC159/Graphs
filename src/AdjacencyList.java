@@ -78,36 +78,70 @@ public class AdjacencyList {
         }
 
         // Print the shortest distance
-        System.out.println("Shortest distance: " + Arrays.toString(dist));
+        System.out.println("Shortest distance: ");
+        for (int k = 0; k < dist.length; k++) {
+            System.out.println("Shortest distance to " + k + " is " + dist[k]);
+        }
 
         // Print the path from a source to any destination
         if (destination != -1) {
+            System.out.println("Print path from source " + source + " to destination " + destination);
+            ArrayDeque<Integer> deque = new ArrayDeque<>();
             int temp = destination;
+            deque.addFirst(temp);
             while (temp != source) {
-                System.out.print(temp + " --- ");
                 temp = parent[temp];
+                deque.addFirst(temp);
             }
-            System.out.print(temp);
+
+            for (Iterator<Integer> it = deque.iterator(); it.hasNext();) {
+                Integer i = it.next();
+                if (it.hasNext()) System.out.print(i + " ---> ");
+                else System.out.print(i);
+            }
+
         }
 
+    }
+
+    void DFSHelper(int node, boolean[] visited) {
+
+        visited[node] = true;
+        System.out.print(node + " ---> ");
+
+        for (Integer n : hm.get(node)) {
+            if (!visited[n]) {
+                DFSHelper(n, visited);
+            }
+        }
+    }
+
+    void depthFirstSearch(int source) {
+        boolean[] visited = new boolean[hm.size()];
+        Arrays.fill(visited, false);
+        DFSHelper(source, visited);
+        System.out.print(" .");
     }
 
     public static void main(String[] args) {
 
         AdjacencyList al = new AdjacencyList();
         al.addEdge(0, 1, true);
-        al.addEdge(0, 4, true);
         al.addEdge(1, 2, true);
         al.addEdge(2, 3, true);
-        al.addEdge(4, 5, true);
-        al.addEdge(3, 4, true);
         al.addEdge(3, 5, true);
         al.addEdge(5, 6, true);
+        al.addEdge(4, 5, true);
+        al.addEdge(0, 4, true);
+        al.addEdge(3, 4, true);
 
         System.out.println("Printing graph: ");
         al.printGraph();
         System.out.println("Breadth first search: ");
         al.breadthFirstSearch(1, 6);
+
+        System.out.println("\nDepth first search: ");
+        al.depthFirstSearch(1);
 
     }
 
